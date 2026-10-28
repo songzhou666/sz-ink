@@ -180,6 +180,23 @@ def m_struct(text: str) -> dict:
     return {"para_cv": cv, "list_markers": markers}
 
 
+def sample_sufficiency(text: str) -> dict:
+    """样本量提示（片段模式）：依赖样本量的指标在短文本上自动标注"不计分依据"，
+    防止静默给 0 分被误读为达标。2026-10-28 v0.4.2：输入含任意文体/片段后新增。"""
+    n_sents = len(split_sentences(text))
+    n_paras = len([p for p in text.split("\n") if p.strip()])
+    flags = {}
+    if n_sents < 4:
+        flags["pattern_entropy"] = f"句数{n_sents}<4，熵不计分"
+    if n_paras < 3:
+        flags["struct"] = f"段落数{n_paras}<3，para_cv不计分"
+    if n_paras < 2:
+        flags["para_breath"] = f"段落数{n_paras}<2，不计分"
+    if len(text) < 300:
+        flags["_mode"] = "片段模式：<300字，S4 只动词层/句层卡(01-24)，篇层/结构卡停用"
+    return flags
+
+
 def run(text: str, register: str = "colloquial_media") -> dict:
     cliche_words = load_words("cliche_common.txt") + load_words(f"cliche_{register}.txt")
     result = {
@@ -200,8 +217,9 @@ def run(text: str, register: str = "colloquial_media") -> dict:
             "cliche_detail": sorted(
                 ({"word": w, "n": n} for w, n in cliche_hits(text, cliche_words).items()),
                 key=lambda x: -x["n"]),
+            "sample_sufficiency": sample_sufficiency(text),
         },
-        "version": "0.2.1",
+        "version": "0.2.2",
     }
     return result
 
@@ -221,6 +239,9 @@ SELF_TEST_SAMPLES = [
      "unquoted_counted", "引号外套话照抓：豁免只豁引用，不豁使用"),
     ("他说要警惕\u0022赋能\u0022这种说法，也别迷信\u0022闭环\u0022。", "colloquial_media",
      "ascii_quote_zero", "ASCII直引号同样豁免（语料实测主形态）"),
+    ("赋能闭环抓手。", "colloquial_media",
+     "fragment_flags", "片段模式：样本不足的指标必须标注，不许静默给0"),
+
 ]
 
 
@@ -231,6 +252,8 @@ def self_test() -> bool:
         m = run(text, reg)["metrics"]
         if case == "ai_cliche":
             passed = m["cliche_density"] > 20 and m["modal_temp"] == 0
+        elif case == "fragment_flags":
+            passed = "pattern_entropy" in run(text, reg)["extra_metrics"]["sample_sufficiency"]
         elif case in ("quote_only_zero", "ascii_quote_zero"):
             passed = m["cliche_density"] == 0
         elif case == "unquoted_counted":
