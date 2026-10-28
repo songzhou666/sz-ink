@@ -1,7 +1,7 @@
 # 语体档案 · 公文体（official_doc）
 
 > L4 资产。**主要资产继承自 sz-writer-enjoy**（rules/deai_blacklist.md + audit_rules.md R1~R7），
-> 本文件是其语体化封装 + sz-noAI 接口适配。单源声明：词表内容以 sz-writer-enjoy 为源，此处不抄正文，改写动作按本档案路由。
+> 本文件是其语体化封装 + sz-ink 接口适配。单源声明：词表内容以 sz-writer-enjoy 为源，此处不抄正文，改写动作按本档案路由。
 
 ## 1. 文体特征指纹
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""sz-noAI 体检脚本 check_metrics.py
+"""sz-ink 体检脚本 check_metrics.py
 用法: python check_metrics.py <文本文件> [--register colloquial_media|official_doc|explanatory]
 输出: 九项指标 JSON（stdout）。阈值读 rules/metrics.yaml（单一事实源）。
 状态: v0.1 骨架——rhythm_cv/cliche_density/modal_temp/hedge_density/para_breath 已实现；

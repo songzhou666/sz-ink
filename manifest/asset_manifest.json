@@ -1,6 +1,6 @@
 {
-  "skill": "sz-noAI",
-  "version": "0.3.4",
+  "skill": "sz-ink",
+  "version": "0.4.0",
   "updated": "2026-10-28",
   "lexicon": {
     "cliche_common.txt": {
@@ -105,7 +105,7 @@
     "date": "2026-10-28",
     "method": "REA方法论（sz-check+_audit_skill机器体检+人工八铁律/四不变式/三硬判据审计）",
     "result": "sz-check 11/0/0；8项发现全部修复；self-test实跑5断言全绿",
-    "report": ".agent/harness/sz-noAI-验收报告-20261028.md",
+    "report": ".agent/harness/sz-ink-验收报告-20261028.md",
     "unresolved": "改写全闭环（S1档案落盘+S6独立盲审）待一次正式完整任务验证"
   }
 }

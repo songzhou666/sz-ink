@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""sz-noAI - build_profile.py 风格档案提取器 (v0.1)
+"""sz-ink - build_profile.py 风格档案提取器 (v0.1)
 用法: python build_profile.py <样例文本文件...> [--name 档案名] [--out 输出.json]
 输入用户自己写的 3-5 段文字，输出风格档案 JSON（L6 资产）：
 词汇偏好/句长分布/语气温度/留白度/节奏特征 + 推荐语体。

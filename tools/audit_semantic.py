@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""sz-noAI - audit_semantic.py 锚点核查器 (v0.1)
+"""sz-ink - audit_semantic.py 锚点核查器 (v0.1)
 用法: python audit_semantic.py <改前.txt> <改后.txt> [--anchors anchors.json]
 S6 还原审核第一查的脚本部分——只查机械可判项：
   ①数字保全：改前所有数字必须仍在改后

@@ -1,7 +1,7 @@
 # 语体档案 · 讲解体（explanatory）
 
 > L4 资产。**唯一有真人统计基线的语体**（85 篇 ima 库课堂转写实测，n=85）。
-> 基线数据：`.agent/harness/sz-noAI-baseline/transcript_baseline.json`
+> 基线数据：`.agent/harness/sz-ink-baseline/transcript_baseline.json`
 
 ## 1. 文体特征指纹
 

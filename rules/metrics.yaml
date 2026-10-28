@@ -1,4 +1,4 @@
-# metrics.yaml — sz-noAI 九项指标定义与阈值组（单一事实源）
+# metrics.yaml — sz-ink 九项指标定义与阈值组（单一事实源）
 # 阈值全部为【初版】，以批次5端到端校准结果为准；校准后更新本文件并跑 self-test。
 # 结构：metrics 定义算法 → registers 按语体给阈值组 → override 记录语体条件差异。
 
@@ -72,7 +72,7 @@ registers:
   explanatory:                        # 讲解体（85篇真人转写实测校准）
     label: 讲解体
     status: active                   # 唯一有真人基线，先转正
-    baseline: ".agent/harness/sz-noAI-baseline/transcript_baseline.json"
+    baseline: ".agent/harness/sz-ink-baseline/transcript_baseline.json"
     overrides:
       rhythm_cv: 0.45               # 真人P25=0.465
       short_burst_ratio: 0.25       # 真人P25=0.273
