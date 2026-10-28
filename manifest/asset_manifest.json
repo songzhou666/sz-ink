@@ -1,6 +1,6 @@
 {
   "skill": "sz-ink",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "updated": "2026-10-28",
   "lexicon": {
     "cliche_common.txt": {
@@ -89,8 +89,12 @@
   },
   "tools": {
     "check_metrics.py": {
-      "status": "v0.2_9of9",
-      "note": "九项指标全部实现：rhythm/short_burst/cliche/modal/hedge/para + pattern_entropy/lex_rotation代理/struct(para_cv+list_markers)；AI腔list_markers=3熵0 vs 人写熵0.296标记0"
+      "status": "v0.2.1_9of9",
+      "note": "九项指标全部实现：rhythm/short_burst/cliche/modal/hedge/para + pattern_entropy/lex_rotation代理/struct(para_cv+list_markers)；v0.2.1新增：套话计数豁免引号内引用语境（引用反例≠使用）+ cliche_detail命中明细输出；self-test 5用例"
+    },
+    "check_numbers.py": {
+      "status": "v0.1_实测通过",
+      "note": "S6第四查数字自洽：提取全文数字+量词声明（含表格），同一主体+量词取值冲突报警；博客稿实测90声明抓出4/5矛盾，修复后清零；self-test 2用例"
     },
     "build_profile.py": {
       "status": "v0.1_实测通过",

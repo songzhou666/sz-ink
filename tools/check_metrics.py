@@ -54,11 +54,36 @@ def m_short_burst(text: str) -> float:
     return sum(1 for b in bursts if len(b) <= 6) / len(bursts)
 
 
+# 引用语境配对（豁免用）：成对引号内的内容视为"引用"而非"使用"
+# 含 ASCII 直引号：实测语料（含本技能自身文档）中文引用常用 "..." 而非弯引号
+QUOTE_PAIRS = [("\u201c", "\u201d"), ("\u2018", "\u2019"),
+               ("\u300c", "\u300d"), ("\u300e", "\u300f"),
+               ("\u0022", "\u0022")]
+
+
+def strip_quoted(text: str) -> str:
+    """删去成对引号内的内容（引用反例不计套话）。
+    2026-10-28 博客自检教训：文章引用"赋能/闭环"当反例，被词表计数误判 3.18/千字。
+    护栏：引号内容不跨行、≤80 字——防止不成对引号吞掉半个文档。"""
+    out = text
+    for l, r in QUOTE_PAIRS:
+        pat = re.escape(l) + r"[^" + re.escape(r) + r"\n]{0,80}" + re.escape(r)
+        out = re.sub(pat, "", out)
+    return out
+
+
+def cliche_hits(text: str, words: list) -> dict:
+    """未豁免（引号外）的套话命中明细：word -> count。"""
+    counted = strip_quoted(text)
+    return {w: counted.count(w) for w in words if counted.count(w)}
+
+
 def m_cliche(text: str, words: list) -> float:
     if not words:
         return 0.0
-    n = len(text)
-    return sum(text.count(w) for w in words) / n * 1000 if n else 0.0
+    counted = strip_quoted(text)
+    n = len(text)  # 分母用原文字数：引用也是文面的一部分
+    return sum(counted.count(w) for w in words) / n * 1000 if n else 0.0
 
 
 def m_modal(text: str) -> float:
@@ -172,8 +197,11 @@ def run(text: str, register: str = "colloquial_media") -> dict:
             "pattern_entropy": m_pattern_entropy(text),
             "lex_rotation_top": m_lex_rotation(text),
             "struct": m_struct(text),
+            "cliche_detail": sorted(
+                ({"word": w, "n": n} for w, n in cliche_hits(text, cliche_words).items()),
+                key=lambda x: -x["n"]),
         },
-        "version": "0.2.0",
+        "version": "0.2.1",
     }
     return result
 
@@ -187,6 +215,12 @@ SELF_TEST_SAMPLES = [
      "以前每天晚上对账要对半个多小时，现在几分钟搞定。当然毛病也有，识别偶尔抽风，"
      "数字一多就乱。不过总体来说挺值，一个月十几块钱，少熬的夜可不止这个数。", "colloquial_media",
      "human_clean", "人写：套话应为0、语气留白应为正"),
+    ("他说要警惕\u201c赋能\u201d这类说法，也别迷信\u201c闭环\u201d。", "colloquial_media",
+     "quote_only_zero", "引用语境豁免：引号内套话不计数（2026-10-28 自检假阳性教训）"),
+    ("他说要警惕\u201c赋能\u201d这类说法。但全文通篇都在赋能。", "colloquial_media",
+     "unquoted_counted", "引号外套话照抓：豁免只豁引用，不豁使用"),
+    ("他说要警惕\u0022赋能\u0022这种说法，也别迷信\u0022闭环\u0022。", "colloquial_media",
+     "ascii_quote_zero", "ASCII直引号同样豁免（语料实测主形态）"),
 ]
 
 
@@ -197,6 +231,10 @@ def self_test() -> bool:
         m = run(text, reg)["metrics"]
         if case == "ai_cliche":
             passed = m["cliche_density"] > 20 and m["modal_temp"] == 0
+        elif case in ("quote_only_zero", "ascii_quote_zero"):
+            passed = m["cliche_density"] == 0
+        elif case == "unquoted_counted":
+            passed = m["cliche_density"] > 0
         else:  # human_clean
             passed = (m["cliche_density"] == 0
                       and m["modal_temp"] > 0 and m["hedge_density"] > 0)
