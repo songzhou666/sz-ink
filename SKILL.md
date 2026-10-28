@@ -1,6 +1,6 @@
 ---
 name: sz-noAI
-version: 0.3.3
+version: 0.3.4
 description: >-
   中文文本去AI味改写器：基于汉语言文学研究（语体学/词汇学/修辞学/语篇学）提供鉴别力，
   不靠禁词表和同义词硬换。整体体检（九项统计指标+语体条件阈值）→ 定点干预（每轮≤3处，
@@ -57,7 +57,8 @@ S0 语体判定 ──► S1 建档 ──► S2 体检 ──► S3 达标判�
 
 ### S2 体检（脚本，零改动）
 ```bash
-python .trae/skills/sz-noAI/tools/check_metrics.py <文本> --register <语体>
+# 在本 skill 根目录下执行（路径相对技能目录，与安装位置无关）
+python tools/check_metrics.py <文本> --register <语体>
 ```
 九项指标定义与阈值：读 `rules/metrics.yaml`（单一事实源，本文件不重复数值）。
 
